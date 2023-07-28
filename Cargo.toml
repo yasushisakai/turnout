@@ -8,7 +8,9 @@ edition = "2021"
 [dependencies]
 chrono = { version = "0.4.26", features = ["serde"] }
 hex = "0.4.3"
+log = "0.4.19"
 ndarray = "0.15.6"
 nohash = "0.2.0"
 ordered-float = "3.7.0"
 serde = { version = "1.0.164", features = ["serde_derive"] }
+sha2 = "0.10.7"

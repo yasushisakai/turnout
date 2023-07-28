@@ -5,6 +5,8 @@ use serde::{
 use std::fmt;
 use hex::{ToHex, FromHex};
 
+use crate::error::TurnoutError;
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Default)]
 pub struct Address([u8; 32]);
 
@@ -15,7 +17,7 @@ impl Address {
 }
 
 impl TryFrom<[u8;32]> for Address {
-    type Error = &'static str;
+    type Error = TurnoutError;
 
     fn try_from(value: [u8;32]) -> Result<Self, Self::Error> {
         Ok(Self(value))
@@ -23,10 +25,10 @@ impl TryFrom<[u8;32]> for Address {
 }
 
 impl TryFrom<String> for Address {
-    type Error = &'static str;
+    type Error = TurnoutError;
 
     fn try_from(value: String) -> Result<Self, Self::Error> {
-        let bytes = <[u8;32]>::from_hex(value).or(Err("cannot convert string to sha256 hex"))?;
+        let bytes = <[u8;32]>::from_hex(value).or(Err(TurnoutError::AddressConversion))?;
         Ok(Self(bytes))
     }
 }
