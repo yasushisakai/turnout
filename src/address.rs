@@ -5,6 +5,8 @@ use serde::{
     ser::{Serialize, Serializer},
 };
 use std::fmt;
+use crate::simple::node::SimpleNode;
+use crate::node::Node;
 use utoipa::ToSchema;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Default, ToSchema)]
@@ -13,6 +15,11 @@ pub struct Address([u8; 32]);
 impl Address {
     pub fn as_bytes(&self) -> &[u8] {
         &self.0
+    }
+
+    pub fn text(text: &str) -> Self {
+        let simple = SimpleNode(text.to_string());
+        simple.address()
     }
 }
 

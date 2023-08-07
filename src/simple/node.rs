@@ -3,7 +3,7 @@ use sha2::{Sha256, Digest};
 
 use crate::{node::Node, address::Address};
 
-pub struct SimpleNode(String);
+pub struct SimpleNode(pub String);
 
 impl Node for SimpleNode {
     fn address(&self) -> Address {
