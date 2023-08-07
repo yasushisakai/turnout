@@ -14,3 +14,4 @@ nohash = "0.2.0"
 ordered-float = "3.7.0"
 serde = { version = "1.0.164", features = ["serde_derive"] }
 sha2 = "0.10.7"
+utoipa = { version = "3.4.4", features = ["axum_extras"] }

@@ -1,25 +1,25 @@
+use crate::error::TurnoutError;
+use hex::{FromHex, ToHex};
 use serde::{
     de::{self, Deserialize, Deserializer, Visitor},
     ser::{Serialize, Serializer},
 };
 use std::fmt;
-use hex::{ToHex, FromHex};
+use utoipa::ToSchema;
 
-use crate::error::TurnoutError;
-
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Default)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Default, ToSchema)]
 pub struct Address([u8; 32]);
 
 impl Address {
-   pub fn as_bytes(&self) -> &[u8] {
-       &self.0
-   }
+    pub fn as_bytes(&self) -> &[u8] {
+        &self.0
+    }
 }
 
-impl TryFrom<[u8;32]> for Address {
+impl TryFrom<[u8; 32]> for Address {
     type Error = TurnoutError;
 
-    fn try_from(value: [u8;32]) -> Result<Self, Self::Error> {
+    fn try_from(value: [u8; 32]) -> Result<Self, Self::Error> {
         Ok(Self(value))
     }
 }
@@ -28,12 +28,12 @@ impl TryFrom<String> for Address {
     type Error = TurnoutError;
 
     fn try_from(value: String) -> Result<Self, Self::Error> {
-        let bytes = <[u8;32]>::from_hex(value).or(Err(TurnoutError::AddressConversion))?;
+        let bytes = <[u8; 32]>::from_hex(value).or(Err(TurnoutError::AddressConversion))?;
         Ok(Self(bytes))
     }
 }
 
-impl fmt::Display for Address{
+impl fmt::Display for Address {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let hex: String = self.0.encode_hex();
         f.write_str(&hex)
@@ -63,7 +63,9 @@ impl<'de> Visitor<'de> for AddressVisior {
     where
         E: de::Error,
     {
-        let bytes = <[u8; 32]>::from_hex(v).or(Err(E::custom("cannot convert hex representation to byte array")))?;
+        let bytes = <[u8; 32]>::from_hex(v).or(Err(E::custom(
+            "cannot convert hex representation to byte array",
+        )))?;
         Ok(Address(bytes))
     }
 }
